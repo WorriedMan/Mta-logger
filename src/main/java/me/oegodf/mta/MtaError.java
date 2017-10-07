@@ -8,11 +8,13 @@ public class MtaError {
     private MtaLab.Error mType;
     private String mErrorText;
     private String mFileName;
+    private String mResource;
     private int mFileLine;
     private int mDupAmount;
 
-    public MtaError(MtaLab.Error type, String errorText, String fileName, int fileLine, int dup) {
+    public MtaError(MtaLab.Error type, String resource, String errorText, String fileName, int fileLine, int dup) {
         mType = type;
+        mResource = resource;
         mErrorText = errorText;
         mFileName = fileName;
         mFileLine = fileLine;
@@ -25,6 +27,10 @@ public class MtaError {
 
     public String getErrorText() {
         return mErrorText;
+    }
+
+    public String getResource() {
+        return mResource;
     }
 
     public String getFileName() {

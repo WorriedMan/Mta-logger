@@ -5,6 +5,8 @@ import javafx.scene.Parent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class MtaLab {
 
@@ -22,10 +24,12 @@ class MtaLab {
             Date date = getLineTime(line);
             String[] fileAndLineNum = getLineFileAndLine(line, type);
             String[] errorAndDup = null;
+            String resourceName = null;
             if (fileAndLineNum != null) {
+                resourceName = getLineResourceName(fileAndLineNum[0]);
                 errorAndDup = getLineErrorText(line, fileAndLineNum[1]);
             }
-            if (date != null && errorAndDup != null) {
+            if (date != null && errorAndDup != null && resourceName != null) {
                 int fileLine;
                 int dupAmount;
                 try {
@@ -34,8 +38,7 @@ class MtaLab {
                 } catch (Exception e) {
                     return null;
                 }
-                System.out.println(errorAndDup[0]);
-                return new MtaError(type, errorAndDup[0], fileAndLineNum[0], fileLine, dupAmount);
+                return new MtaError(type, resourceName, errorAndDup[0], fileAndLineNum[0], fileLine, dupAmount);
             }
             return null;
         }
@@ -51,6 +54,17 @@ class MtaLab {
             return Error.SCRIPT_ERROR;
         }
         return null;
+    }
+
+    private String getLineResourceName(String fileName) {
+        String commonString = fileName.replaceAll("\\\\", "/");
+        Pattern p = Pattern.compile(".*\\[[a-zA-Z0-9]+.]/");
+        Matcher matcher = p.matcher(commonString);
+        if (matcher.find()) {
+            int matcherEnd = matcher.end();
+            commonString = commonString.substring(matcherEnd);
+        }
+        return commonString.replaceAll("/.+", "");
     }
 
     private Date getLineTime(String line) {
