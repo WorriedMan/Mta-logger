@@ -1,6 +1,4 @@
-package me.oegodf.mta;
-
-import javafx.scene.Parent;
+package me.oegodf.mta.reader;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

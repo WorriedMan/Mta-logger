@@ -1,8 +1,4 @@
-package me.oegodf.mta;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+package me.oegodf.mta.reader;
 
 public class MtaError {
     private MtaLab.Error mType;

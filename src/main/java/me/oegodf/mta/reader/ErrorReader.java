@@ -1,30 +1,27 @@
-package me.oegodf.mta;
+package me.oegodf.mta.reader;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
-class ErrorReader {
+public class ErrorReader {
     private String mFile;
     private MtaLab mLab;
     private List<MtaError> mMtaErrorList;
-    private ErrorParserLoader mErrorParser;
+    private ErrorParser mErrorParser;
 
-    ErrorReader(String file) {
+    public ErrorReader(String file) {
         mMtaErrorList = new ArrayList<>();
         mFile = file;
         mLab = new MtaLab();
-        mErrorParser = new ErrorParserLoader();
+        mErrorParser = new ErrorParser();
     }
 
-    void load() throws IOException {
+    public void load() throws IOException {
         Path path = Paths.get(mFile);
         Stream<String> stream = Files.lines(path);
         stream.forEach(this::checkLine);

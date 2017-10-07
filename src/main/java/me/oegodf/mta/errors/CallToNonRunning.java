@@ -1,6 +1,6 @@
 package me.oegodf.mta.errors;
 
-import me.oegodf.mta.MtaError;
+import me.oegodf.mta.reader.MtaError;
 
 public class CallToNonRunning extends ErrorSuggestion {
     private String mText = "Попытка обращения к не запущенному ресурсу %s.";

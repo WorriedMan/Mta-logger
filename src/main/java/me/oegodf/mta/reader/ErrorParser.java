@@ -1,17 +1,20 @@
-package me.oegodf.mta;
+package me.oegodf.mta.reader;
 
 import me.oegodf.mta.errors.CallToNonRunning;
+import me.oegodf.mta.errors.ConcatenateNilValue;
 import me.oegodf.mta.errors.ErrorSuggestion;
+import me.oegodf.mta.errors.Solvable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ErrorParserLoader {
+public class ErrorParser {
     private List<ErrorSuggestion> mErrorSuggestions;
 
-    ErrorParserLoader() {
+    ErrorParser() {
         mErrorSuggestions = new ArrayList<>();
         mErrorSuggestions.add(new CallToNonRunning());
+        mErrorSuggestions.add(new ConcatenateNilValue());
     }
 
     List<ErrorSuggestion> getErrorSuggestions() {
@@ -25,6 +28,12 @@ public class ErrorParserLoader {
                 System.out.println("ERROR: " + error.getErrorText());
                 System.out.println("DESCRIPT: " + suggestion.getDescription(error));
                 System.out.println("SUGGEST: " + suggestion.getSuggestion(error));
+                if (suggestion instanceof Solvable) {
+                    String solution = ((Solvable) suggestion).getSolution(error);
+                    if (solution != null) {
+                        System.out.println("SOLUTION: " + solution);
+                    }
+                }
                 return suggestion.getSuggestion(error);
             }
         }

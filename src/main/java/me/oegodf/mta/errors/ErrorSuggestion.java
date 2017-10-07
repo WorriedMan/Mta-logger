@@ -1,6 +1,6 @@
 package me.oegodf.mta.errors;
 
-import me.oegodf.mta.MtaError;
+import me.oegodf.mta.reader.MtaError;
 
 public abstract class ErrorSuggestion {
         public abstract String getDescription(MtaError error);
