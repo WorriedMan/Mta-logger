@@ -16,7 +16,7 @@ class MtaLab {
 
     MtaLab() {}
 
-    MtaError createError(String line) {
+    MtaError createError(String line, int serverStartId) {
         Error type = getLineType(line);
         if (type != null && !line.contains("Loading script failed") && !line.contains("please recompile")) {
             Date date = getLineTime(line);
@@ -36,7 +36,7 @@ class MtaLab {
                 } catch (Exception e) {
                     return null;
                 }
-                return new MtaError(type, resourceName, errorAndDup[0], fileAndLineNum[0], fileLine, dupAmount);
+                return new MtaError(type, resourceName, errorAndDup[0], fileAndLineNum[0], fileLine, dupAmount, date, serverStartId);
             }
             return null;
         }
@@ -48,6 +48,8 @@ class MtaLab {
             return Error.WARNING;
         } else if (line.contains("] ERROR: ")) {
             return Error.ERROR;
+        } else if (line.contains("Unknown script type specified")) {
+            return Error.WARNING;
         } else if (line.contains("] SCRIPT ERROR: ")) {
             return Error.SCRIPT_ERROR;
         }
@@ -56,7 +58,7 @@ class MtaLab {
 
     private String getLineResourceName(String fileName) {
         String commonString = fileName.replaceAll("\\\\", "/");
-        Pattern p = Pattern.compile(".*\\[[a-zA-Z0-9]+.]/");
+        Pattern p = Pattern.compile(".*\\[[a-zA-Z0-9\\-_]+.]/");
         Matcher matcher = p.matcher(commonString);
         if (matcher.find()) {
             int matcherEnd = matcher.end();

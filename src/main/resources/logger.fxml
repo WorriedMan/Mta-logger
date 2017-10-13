@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.AnchorPane?>
-<?import org.fxmisc.richtext.StyleClassedTextArea?>
+<?import org.fxmisc.richtext.CodeArea?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.oegodf.mta.ui.LoggerController">
+<AnchorPane prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.oegodf.mta.ui.LoggerController">
    <children>
-      <StyleClassedTextArea layoutX="8.0" layoutY="14.0" prefHeight="382.0" prefWidth="585.0" />
+      <CodeArea fx:id="mTextArea" layoutX="8.0" layoutY="14.0" prefHeight="382.0" prefWidth="785.0" />
    </children>
 </AnchorPane>

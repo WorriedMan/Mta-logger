@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="447.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.oegodf.mta.ui.MainMenuController">
+   <children>
+      <TableView fx:id="mErrorsTable" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="35">
+        <columns>
+        </columns>
+      </TableView>
+      <TextField fx:id="mSearchField" prefWidth="150.0" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="5" />
+      <CheckBox fx:id="mShowOnlyLastLaunchCheckbox" mnemonicParsing="false" prefWidth="163.0" text="Только последний запуск" AnchorPane.rightAnchor="165" AnchorPane.topAnchor="8" />
+   </children>
+</AnchorPane>

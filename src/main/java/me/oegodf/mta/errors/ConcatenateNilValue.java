@@ -18,7 +18,7 @@ public class ConcatenateNilValue extends ErrorSuggestion implements Solvable {
         String errorText = error.getErrorText();
         String resourceName = getResourceName(errorText);
         String suggestion = "Добавьте проверку на nil (например, if (abc == nil) then, либо окружите данную переменную скобками. Например:\noutputChatBox(\"Игрок говорит: \"..abc) замените на outputChatBox(\"Игрок говорит: \"..(abc or \"\"))";
-        return String.format(suggestion,error.getResource(),resourceName);
+        return suggestion;
     }
 
     @Override
@@ -36,6 +36,15 @@ public class ConcatenateNilValue extends ErrorSuggestion implements Solvable {
         }
     }
 
+    @Override
+    public ErrorLines getErrorLines(MtaError error) {
+        FileLoader luaFile = new FileLoader(error.getFileName());
+        luaFile.load();
+        if (luaFile.loaded()) {
+            return luaFile.getErrorLines(error.getFileLine());
+        }
+        return null;
+    }
 
     @Override
     public String getSolution(MtaError error) {

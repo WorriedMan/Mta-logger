@@ -12,6 +12,7 @@
       <entry name="!?*.clj" />
       <entry name="!?*.aj" />
       <entry name="*.fxml" />
+      <entry name="*.css" />
     </wildcardResourcePatterns>
     <bytecodeTargetLevel>
       <module name="mta_main" target="1.8" />

@@ -24,10 +24,12 @@ public class ErrorParser {
     String getErrorSuggestion(MtaError error) {
         for (ErrorSuggestion suggestion : mErrorSuggestions) {
             if (suggestion.checkErrorPasses(error)) {
+                error.setSuggestion(suggestion);
                 System.out.println("------------------------");
                 System.out.println("ERROR: " + error.getErrorText());
                 System.out.println("DESCRIPT: " + suggestion.getDescription(error));
                 System.out.println("SUGGEST: " + suggestion.getSuggestion(error));
+                System.out.println("SERV START: " + error.getServerStartId());
                 if (suggestion instanceof Solvable) {
                     String solution = ((Solvable) suggestion).getSolution(error);
                     if (solution != null) {

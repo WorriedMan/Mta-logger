@@ -26,6 +26,11 @@ public class CallToNonRunning extends ErrorSuggestion {
         return error.getErrorText().contains(keyword);
     }
 
+    @Override
+    public ErrorLines getErrorLines(MtaError error) {
+        return new ErrorLines(new String[0],1, 1);
+    }
+
     private String getResourceName(String line) {
         int endPosition = line.indexOf(')');
         if (endPosition > 0) {
