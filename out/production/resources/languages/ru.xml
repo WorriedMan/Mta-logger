@@ -1,0 +1,20 @@
+<language>
+    <string id="title">MTA log manager</string>
+    <string id="big_file">Файл слишком большой</string>
+    <string id="big_file_description">Ваш файл с логами слишком большой, будут прочитаны только последние %s МБ данного файла</string>
+    <string id="error">Ошибка</string>
+    <string id="date">Дата</string>
+    <string id="resource">Ресурс</string>
+    <string id="text_description">Текст ошибки</string>
+    <string id="date_description">Дата ошибки</string>
+    <string id="dup_description">Сколько раз подряд ошибка повторилась за короткое время</string>
+    <string id="resource_description">Ресурс, в котором произошла ошибка</string>
+    <string id="filtration">Фильтрация</string>
+    <string id="search">Поиск</string>
+    <string id="only_last_launch">Только последний запуск</string>
+    <string id="only_last_launch_descr">Показывать ошибки только с последнего запуска сервера</string>
+    <string id="info_label">Информация</string>
+    <string id="file_line_not_found">Не удалось найти файл или строку</string>
+    <string id="error_not_supports_line_showing">Для данной ошибки нельзя посмотреть строчку кода</string>
+    <string id="error_not_supports_line_show_descr">Решение данной ошибки не предусматривает работу с .lua файлами</string>
+</language>

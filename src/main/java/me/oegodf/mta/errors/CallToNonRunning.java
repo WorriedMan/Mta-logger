@@ -1,23 +1,28 @@
 package me.oegodf.mta.errors;
 
 import me.oegodf.mta.reader.MtaError;
+import me.oegodf.mta.resources.FileLoader;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CallToNonRunning extends ErrorSuggestion {
-    private String mText = "Попытка обращения к не запущенному ресурсу %s.";
-    private String mSuggestion = "Добавьте в meta.xml файл ресурса %s строку <include resource=\"%s\">";
+    private Pattern resourcePattern = Pattern.compile("Call to non-running server resource \\((\\b\\w+\\b)\\)");
 
     @Override
     public String getDescription(MtaError error) {
         String errorText = error.getErrorText();
         String resourceName = getResourceName(errorText);
-        return String.format(mText, resourceName);
+        String text = "Попытка обращения к не запущенному ресурсу %s";
+        return String.format(text, resourceName);
     }
 
     @Override
     public String getSuggestion(MtaError error) {
         String errorText = error.getErrorText();
         String resourceName = getResourceName(errorText);
-        return String.format(mSuggestion,error.getResource(),resourceName);
+        String suggestion = "Добавьте в meta.xml файл ресурса %s строку <include resource=\"%s\">";
+        return String.format(suggestion, error.getResource(), resourceName);
     }
 
     @Override
@@ -26,19 +31,11 @@ public class CallToNonRunning extends ErrorSuggestion {
         return error.getErrorText().contains(keyword);
     }
 
-    @Override
-    public ErrorLines getErrorLines(MtaError error) {
-        return new ErrorLines(new String[0],1, 1);
-    }
-
     private String getResourceName(String line) {
-        int endPosition = line.indexOf(')');
-        if (endPosition > 0) {
-            return line.substring(46, endPosition);
-        } else {
-            return "";
+        Matcher matcher = resourcePattern.matcher(line);
+        if (matcher.find()) {
+            return matcher.group(1);
         }
+        return "";
     }
-
-
 }

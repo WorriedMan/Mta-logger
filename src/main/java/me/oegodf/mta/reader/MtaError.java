@@ -22,13 +22,14 @@ public class MtaError {
     private int mServerStartId;
     private String mHash;
     private boolean mToDelete;
+    private SimpleDateFormat mDateFormat;
 
-    private StringProperty mErrorTextProperty;
-    private StringProperty mResourceProperty;
-    private IntegerProperty mDupProperty;
-    private StringProperty mDateProperty;
+//    private StringProperty mErrorTextProperty;
+//    private StringProperty mResourceProperty;
+//    private IntegerProperty mDupProperty;
+//    private StringProperty mDateProperty;
 
-    public MtaError(MtaLab.Error type, String resource, String errorText, String fileName, int fileLine, int dup, Date date, int serverStartId) {
+    public MtaError(MtaLab.Error type, String resource, String errorText, String fileName, int fileLine, int dup, Date date, int serverStartId, SimpleDateFormat df) {
         mType = type;
         mResource = resource;
         mErrorText = errorText;
@@ -37,12 +38,13 @@ public class MtaError {
         mDupAmount = dup;
         mDate = date;
         mServerStartId = serverStartId;
+        mDateFormat = df;
 
-        mErrorTextProperty = new SimpleStringProperty(mErrorText);
-        mResourceProperty = new SimpleStringProperty(resource);
-        mDupProperty = new SimpleIntegerProperty(mDupAmount);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-        mDateProperty = new SimpleStringProperty(dateFormat.format(date));
+//        mErrorTextProperty = new SimpleStringProperty(mErrorText);
+//        mResourceProperty = new SimpleStringProperty(resource);
+//        mDupProperty = new SimpleIntegerProperty(mDupAmount);
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+//        mDateProperty = new SimpleStringProperty(dateFormat.format(date));
 
         generateErrorHash();
     }
@@ -51,7 +53,7 @@ public class MtaError {
         try {
             String tempString = mResource+mErrorText+mFileName+mFileName+mDate.getTime();
             MessageDigest md = MessageDigest.getInstance("MD5");
-             md.update(tempString.getBytes("UTF-8"));
+            md.update(tempString.getBytes("UTF-8"));
             byte[] hashArray = md.digest();
             StringBuilder sb = new StringBuilder();
             for (byte aHashArray : hashArray) {
@@ -89,7 +91,7 @@ public class MtaError {
 
     public void setDupAmount(int dupAmount) {
         mDupAmount = dupAmount;
-        mDupProperty.setValue(dupAmount);
+//        mDupProperty.setValue(dupAmount);
     }
 
     public void setSuggestion(ErrorSuggestion suggestion) {
@@ -100,20 +102,32 @@ public class MtaError {
         return mSuggestion;
     }
 
+//    public StringProperty getErrorTextProperty() {
+//        return mErrorTextProperty;
+//    }
     public StringProperty getErrorTextProperty() {
-        return mErrorTextProperty;
+        return new SimpleStringProperty(mErrorText);
     }
 
+//    public StringProperty getResourceProperty() {
+//        return mResourceProperty;
+//    }
     public StringProperty getResourceProperty() {
-        return mResourceProperty;
+        return new SimpleStringProperty(mResource);
     }
 
+//    public IntegerProperty getDupProperty() {
+//        return mDupProperty;
+//    }
     public IntegerProperty getDupProperty() {
-        return mDupProperty;
+        return new SimpleIntegerProperty(mDupAmount);
     }
 
+//    public StringProperty getDateProperty() {
+//        return mDateProperty;
+//    }
     public StringProperty getDateProperty() {
-        return mDateProperty;
+        return new SimpleStringProperty(mDateFormat.format(mDate));
     }
 
     public int getServerStartId() {

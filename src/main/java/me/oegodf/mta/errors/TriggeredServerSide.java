@@ -2,7 +2,7 @@ package me.oegodf.mta.errors;
 
 import me.oegodf.mta.reader.MtaError;
 
-public class TriggeredServerSide extends ErrorSuggestion implements Solvable {
+public class TriggeredServerSide extends ErrorSuggestion {
     @Override
     public String getDescription(MtaError error) {
         return null;
@@ -18,13 +18,5 @@ public class TriggeredServerSide extends ErrorSuggestion implements Solvable {
         return error.getErrorText().contains("triggered serverside event");
     }
 
-    @Override
-    public ErrorLines getErrorLines(MtaError error) {
-        return null;
-    }
 
-    @Override
-    public String getSolution(MtaError error) {
-        return null;
-    }
 }

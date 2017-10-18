@@ -16,7 +16,7 @@ public class FileLoader {
     private static int LINES_TOP = 15;
     private static int LINES_BOTTOM = 15;
 
-    public FileLoader(String path) {
+    FileLoader(String path) {
         mPath = "F:/server/mods/deathmatch/resources/" + path;
     }
 
@@ -33,7 +33,6 @@ public class FileLoader {
     }
 
     public ErrorLines getErrorLines(int line) {
-//        line = line-1;
         int startLine = line-LINES_TOP;
         int endLine = line+LINES_BOTTOM;
         if (startLine < 0) {
@@ -72,5 +71,9 @@ public class FileLoader {
             }
         }
         return null;
+    }
+
+    public String getPath() {
+        return mPath;
     }
 }

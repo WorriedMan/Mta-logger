@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane fx:id="mMainPane" prefHeight="447.0" prefWidth="755.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.oegodf.mta.ui.MainMenuController">
+    <children>
+        <TableView fx:id="mErrorsTable" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="180" AnchorPane.topAnchor="0">
+            <columns>
+            </columns>
+        </TableView>
+        <AnchorPane fx:id="mSettingsPane" AnchorPane.rightAnchor="5" AnchorPane.topAnchor="5">
+            <children>
+            <AnchorPane fx:id="mFilterPane" AnchorPane.leftAnchor="5" AnchorPane.rightAnchor="5" AnchorPane.topAnchor="5">
+                <children>
+                  <Label styleClass="filter_label" text="Фильтрация" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" />
+                    <TextField fx:id="mSearchField" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="30" />
+                    <CheckBox fx:id="mShowOnlyLastLaunchCheckbox" mnemonicParsing="false" text="Только последний запуск" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="65" />
+
+                </children>
+            </AnchorPane>
+
+                <AnchorPane fx:id="mInfoPane" AnchorPane.leftAnchor="5" AnchorPane.rightAnchor="5" AnchorPane.topAnchor="150">
+               <children>
+                   <Label styleClass="filter_label" text="Информация" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" />
+                  <Button fx:id="mShowErrorLine" mnemonicParsing="false" text="Показать строку" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="30" />
+               </children>
+                </AnchorPane>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

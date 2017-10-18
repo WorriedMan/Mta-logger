@@ -1,13 +1,11 @@
 package me.oegodf.mta.ui;
 
-import javafx.collections.ObservableList;
 import me.oegodf.mta.reader.MtaError;
 import me.oegodf.mta.reader.MtaErrorList;
 
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class FilterCallable implements Callable<MtaErrorList> {
@@ -27,7 +25,6 @@ public class FilterCallable implements Callable<MtaErrorList> {
             boolean textPass = checkTextPass(error);
             return lastLaunchPass && textPass;
         }).collect(Collectors.toCollection(MtaErrorList::new));
-
     }
 
     private boolean checkTextPass(MtaError error) {

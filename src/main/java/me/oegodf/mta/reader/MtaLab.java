@@ -8,35 +8,40 @@ import java.util.regex.Pattern;
 
 class MtaLab {
 
+    private Pattern mResourceNamePattern = Pattern.compile(".*\\[[a-zA-Z0-9\\-_]+.]/");
+    private Pattern mErrorLinePattern = Pattern.compile(":[0-9]+:|\\(Line [0-9]+\\)");
+    private Pattern mErrorLineNumberPattern = Pattern.compile("[0-9]+");
+    private SimpleDateFormat mLineTimeDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+    private SimpleDateFormat mErrorDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+
     enum Error {
         ERROR,
         WARNING,
         SCRIPT_ERROR
     }
+    MtaLab() {
 
-    MtaLab() {}
+    }
 
     MtaError createError(String line, int serverStartId) {
         Error type = getLineType(line);
         if (type != null && !line.contains("Loading script failed") && !line.contains("please recompile")) {
             Date date = getLineTime(line);
-            String[] fileAndLineNum = getLineFileAndLine(line, type);
+            FileAndLineParseResult fileAndLineNum = getLineFileAndLine(line, type);
             String[] errorAndDup = null;
             String resourceName = null;
-            if (fileAndLineNum != null) {
-                resourceName = getLineResourceName(fileAndLineNum[0]);
-                errorAndDup = getLineErrorText(line, fileAndLineNum[1]);
+            if (fileAndLineNum != null && fileAndLineNum.getFile() != null && fileAndLineNum.getLine() != null) {
+                resourceName = getLineResourceName(fileAndLineNum.getFile());
+                errorAndDup = getLineErrorText(line, fileAndLineNum);
             }
             if (date != null && errorAndDup != null && resourceName != null) {
-                int fileLine;
                 int dupAmount;
                 try {
-                    fileLine = Integer.parseInt(fileAndLineNum[1]);
                     dupAmount = Integer.parseInt(errorAndDup[1]);
                 } catch (Exception e) {
                     return null;
                 }
-                return new MtaError(type, resourceName, errorAndDup[0], fileAndLineNum[0], fileLine, dupAmount, date, serverStartId);
+                return new MtaError(type, resourceName, errorAndDup[0], fileAndLineNum.getFile(), fileAndLineNum.getLine(), dupAmount, date, serverStartId, mErrorDateFormat);
             }
             return null;
         }
@@ -58,8 +63,7 @@ class MtaLab {
 
     private String getLineResourceName(String fileName) {
         String commonString = fileName.replaceAll("\\\\", "/");
-        Pattern p = Pattern.compile(".*\\[[a-zA-Z0-9\\-_]+.]/");
-        Matcher matcher = p.matcher(commonString);
+        Matcher matcher = mResourceNamePattern.matcher(commonString);
         if (matcher.find()) {
             int matcherEnd = matcher.end();
             commonString = commonString.substring(matcherEnd);
@@ -68,17 +72,16 @@ class MtaLab {
     }
 
     private Date getLineTime(String line) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
         String dateString = line.substring(1, 20);
         Date date = null;
         try {
-            date = sdf.parse(dateString);
+            date = mLineTimeDateFormat.parse(dateString);
         } catch (ParseException ignored) {
         }
         return date;
     }
 
-    private String[] getLineFileAndLine(String line, Error type) {
+    private FileAndLineParseResult getLineFileAndLine(String line, Error type) {
         int start = 0;
         switch (type) {
             case ERROR:
@@ -94,26 +97,35 @@ class MtaLab {
         if (start > 0) {
             String restOfTheString = line.substring(start);
             String file = null;
-            String lineNum;
-            int fileEnd = 0;
-            for (int i = 0; i < restOfTheString.length(); i++) {
-                if (restOfTheString.charAt(i) == ':') {
-                    if (file == null) {
-                        file = restOfTheString.substring(0, i);
-                        fileEnd = i;
-                    } else {
-                        lineNum = restOfTheString.substring(fileEnd + 1, i);
-                        return new String[]{file, lineNum};
-                    }
+            String lineNum = null;
+            Integer lineNumInteger = null;
+            Integer matcherEnd = 0;
+            Matcher matcher = mErrorLinePattern.matcher(restOfTheString);
+            if (matcher.find()) {
+                int matcherStart = matcher.start();
+                matcherEnd = matcher.end();
+                file = restOfTheString.substring(0,matcherStart);
+                String lineString = restOfTheString.substring(matcherStart,matcherEnd);
+                matcher = mErrorLineNumberPattern.matcher(lineString);
+                if (matcher.find()) {
+                    lineNum = lineString.substring(matcher.start(),matcher.end());
+                } else {
+                    lineNum = "0";
                 }
             }
+            try {
+                assert lineNum != null;
+                lineNumInteger = Integer.parseInt(lineNum);
+            } catch (Exception e) {
+                lineNumInteger = 0;
+            }
+            return new FileAndLineParseResult(file,lineNumInteger,matcherEnd+start);
         }
         return null;
     }
 
-    private String[] getLineErrorText(String line, String lineNum) {
-        String lineNumText = ":" + lineNum + ": ";
-        int sartPosition = line.indexOf(lineNumText) + lineNumText.length();
+    private String[] getLineErrorText(String line, FileAndLineParseResult lineParseResult) {
+        int startPosition = lineParseResult.getLineEndPosition()+1;
         int dupPosition = line.indexOf("[DUP x");
         String dupAmount = "0";
         Integer endPosition = line.length();
@@ -121,13 +133,8 @@ class MtaLab {
             endPosition = dupPosition;
             dupAmount = line.substring(dupPosition + 6, line.length() - 1);
         }
-        String errorText = line.substring(sartPosition, endPosition);
+        String errorText = line.substring(startPosition, endPosition);
         return new String[]{errorText, dupAmount};
     }
 
-    private int[] startEndPosition(String sentence, String word) {
-        int startingPosition = sentence.indexOf(word);
-        int endingPosition = startingPosition + word.length();
-        return new int[]{startingPosition, endingPosition};
-    }
 }
